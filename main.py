@@ -1,7 +1,8 @@
-#!/usr/bin/env python3
+
 """
 Programa principal para el proyecto de Teoría de la Computación
 Convierte expresiones regulares a autómatas y los minimiza
+Proyecto 1 de Logica Computacional 
 """
 
 from shunting_yard import convertir_a_postfix, mostrar_conversion
@@ -151,5 +152,4 @@ def main():
             print(f"Error al procesar la expresión: {e}")
             print("Verifica que la expresión esté bien formada")
 
-if __name__ == "__main__":
-    main()
+main()
