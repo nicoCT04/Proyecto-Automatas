@@ -1,0 +1,16 @@
+digraph automata {
+    rankdir=LR;
+    size="8,5";
+    label="AFD Mínimo para: \?(((.|ε)?!?)*)+";
+    labelloc="t";
+    node [shape = circle];
+
+    node [shape = doublecircle]; "1";
+
+    node [shape = circle];
+    start [shape=point, width=0];
+    start -> "0";
+
+    "0" -> "1" [label="?"];
+    "1" -> "1" [label=" , !, ,, -, ., 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ?, @, A, B, C, D, ε, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, _, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z"];
+}
