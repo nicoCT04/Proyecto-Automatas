@@ -2,7 +2,6 @@
 Implementación del algoritmo de Thompson para convertir expresiones regulares a AFN
 """
 from automata import Automata
-from shunting_yard import alfabeto
 
 class ConstructorAFN:
     def __init__(self):
@@ -53,10 +52,6 @@ class ConstructorAFN:
                     afn = pila.pop()
                     afn_opcional = self.opcional(afn)
                     pila.append(afn_opcional)
-            elif simbolo == '.':
-                # Comodín - cualquier carácter
-                afn = self.crear_afn_comodin()
-                pila.append(afn)
             elif self.es_simbolo(simbolo):
                 # Crear AFN básico para un símbolo (verificar DESPUÉS de operadores)
                 afn = self.crear_afn_simbolo(simbolo)
@@ -74,11 +69,10 @@ class ConstructorAFN:
         (letras, dígitos, épsilon, @, . literal, etc.)
         """
         # Operadores y metacaracteres reservados del regex  
-        operadores_reservados = {'|', '·', '.', '*', '+', '(', ')', '[', ']', '\\', '?'}
+        operadores_reservados = {'|', '·', '*', '+', '(', ')', '[', ']', '\\', '?'}
         
         # Un símbolo es cualquier carácter que NO sea un operador reservado
-        # El punto (.) sin escape es un comodín, no un símbolo literal
-        # El punto literal se representa como ● (escapado)
+        # El punto (.) es ahora un símbolo literal
         # El operador de concatenación es · (MIDDLE DOT)
         return caracter not in operadores_reservados
     
@@ -110,21 +104,6 @@ class ConstructorAFN:
         afn = Automata()
         estado = self.nuevo_estado()
         afn.establecer_estado_inicial(estado)
-        return afn
-    
-    def crear_afn_comodin(self):
-        """Crea un AFN que acepta cualquier carácter (comodín .)"""
-        afn = Automata()
-        estado_inicial = self.nuevo_estado()
-        estado_final = self.nuevo_estado()
-        
-        afn.establecer_estado_inicial(estado_inicial)
-        afn.agregar_estado_aceptacion(estado_final)
-        
-        # Agregar transición para cada carácter del alfabeto universal
-        for caracter in alfabeto:
-            afn.agregar_transicion(estado_inicial, caracter, estado_final)
-        
         return afn
     
     def concatenar(self, afn1, afn2):

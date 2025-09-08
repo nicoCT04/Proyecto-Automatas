@@ -76,9 +76,6 @@ def convertir_a_postfix(expresion):
                 salida.append(pila_operadores.pop())
             if pila_operadores:
                 pila_operadores.pop()  # Quitar el '('
-        elif caracter == '.':
-            # El punto es un comodín - agregar directamente como operando especial
-            salida.append('.')  # En postfix, . representa "cualquier carácter"
         elif caracter in precedencia:
             # Si es un operador (verificar ANTES que símbolo)
             while (pila_operadores and 
@@ -150,11 +147,10 @@ def es_simbolo(caracter):
     (letras, dígitos, épsilon, @, símbolos especiales, etc.)
     """
     # Operadores y metacaracteres reservados del regex
-    operadores_reservados = {'|', '·', '.', '*', '+', '(', ')', '[', ']', '\\', '?'}
+    operadores_reservados = {'|', '·', '*', '+', '(', ')', '[', ']', '\\', '?'}
     
     # Un símbolo es cualquier carácter que NO sea un operador reservado
-    # El punto (.) sin escape es un comodín, no un símbolo literal
-    # El punto literal se representa como ● (escapado)
+    # El punto (.) es ahora un símbolo literal
     # El operador de concatenación es · (MIDDLE DOT)
     return caracter not in operadores_reservados
 
