@@ -22,9 +22,23 @@ def procesar_escapes(expresion):
             elif expresion[i + 1] == '?':
                 resultado.append('◆')  # Signo de interrogación literal usando símbolo especial
                 i += 2
+            elif expresion[i + 1] == '(':
+                resultado.append('◎')  # Paréntesis izquierdo literal
+                i += 2
+            elif expresion[i + 1] == ')':
+                resultado.append('◉')  # Paréntesis derecho literal
+                i += 2
+            elif expresion[i + 1] == '\\':
+                resultado.append('◈')  # Barra invertida literal
+                i += 2
+            elif expresion[i + 1] == '{':
+                resultado.append('◊')  # Llave izquierda literal
+                i += 2
+            elif expresion[i + 1] == '}':
+                resultado.append('◘')  # Llave derecha literal
+                i += 2
             else:
-                # Otros escapes - mantener por ahora
-                resultado.append(expresion[i])
+                # Otros escapes - convertir a literal quitando la barra
                 resultado.append(expresion[i + 1])
                 i += 2
         elif expresion[i] == '[':

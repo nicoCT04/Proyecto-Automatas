@@ -94,6 +94,21 @@ class ConstructorAFN:
         elif simbolo == '◆':
             # Signo de interrogación literal - convertir de vuelta a '?'
             afn.agregar_transicion(estado_inicial, '?', estado_final)
+        elif simbolo == '◎':
+            # Paréntesis izquierdo literal - convertir de vuelta a '('
+            afn.agregar_transicion(estado_inicial, '(', estado_final)
+        elif simbolo == '◉':
+            # Paréntesis derecho literal - convertir de vuelta a ')'
+            afn.agregar_transicion(estado_inicial, ')', estado_final)
+        elif simbolo == '◈':
+            # Barra invertida literal - convertir de vuelta a '\'
+            afn.agregar_transicion(estado_inicial, '\\', estado_final)
+        elif simbolo == '◊':
+            # Llave izquierda literal - convertir de vuelta a '{'
+            afn.agregar_transicion(estado_inicial, '{', estado_final)
+        elif simbolo == '◘':
+            # Llave derecha literal - convertir de vuelta a '}'
+            afn.agregar_transicion(estado_inicial, '}', estado_final)
         else:
             afn.agregar_transicion(estado_inicial, simbolo, estado_final)
         
