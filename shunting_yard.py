@@ -2,8 +2,8 @@
 Implementación del algoritmo Shunting Yard para convertir expresiones regulares a notación postfix
 """
 
-# Alfabeto universal que el comodín . puede representar
-ALFABETO_UNIVERSAL = list('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@._!?-, ')
+
+alfabeto = list('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@._!?-, ')
 
 def procesar_escapes(expresion):
     """

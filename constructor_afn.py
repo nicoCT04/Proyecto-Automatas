@@ -2,7 +2,7 @@
 Implementación del algoritmo de Thompson para convertir expresiones regulares a AFN
 """
 from automata import Automata
-from shunting_yard import ALFABETO_UNIVERSAL
+from shunting_yard import alfabeto
 
 class ConstructorAFN:
     def __init__(self):
@@ -122,7 +122,7 @@ class ConstructorAFN:
         afn.agregar_estado_aceptacion(estado_final)
         
         # Agregar transición para cada carácter del alfabeto universal
-        for caracter in ALFABETO_UNIVERSAL:
+        for caracter in alfabeto:
             afn.agregar_transicion(estado_inicial, caracter, estado_final)
         
         return afn
