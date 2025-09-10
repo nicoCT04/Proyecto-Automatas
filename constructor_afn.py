@@ -20,11 +20,7 @@ class ConstructorAFN:
         pila = []
         
         for simbolo in postfix:
-            if self.es_simbolo(simbolo):
-                # Crear AFN básico para un símbolo
-                afn = self.crear_afn_simbolo(simbolo)
-                pila.append(afn)
-            elif simbolo == '.':
+            if simbolo == '·':
                 # Concatenación
                 if len(pila) >= 2:
                     afn2 = pila.pop()
@@ -50,6 +46,16 @@ class ConstructorAFN:
                     afn = pila.pop()
                     afn_positiva = self.positiva(afn)
                     pila.append(afn_positiva)
+            elif simbolo == '?':
+                # Opcional (cero o una repetición)
+                if len(pila) >= 1:
+                    afn = pila.pop()
+                    afn_opcional = self.opcional(afn)
+                    pila.append(afn_opcional)
+            elif self.es_simbolo(simbolo):
+                # Crear AFN básico para un símbolo (verificar DESPUÉS de operadores)
+                afn = self.crear_afn_simbolo(simbolo)
+                pila.append(afn)
         
         if pila:
             return pila[0]
@@ -58,8 +64,17 @@ class ConstructorAFN:
             return self.crear_afn_vacio()
     
     def es_simbolo(self, caracter):
-        """Determina si un carácter es un símbolo del alfabeto"""
-        return caracter.isalnum() or caracter == 'ε' or caracter == 'E'
+        """
+        Determina si un carácter es un símbolo del alfabeto
+        (letras, dígitos, épsilon, @, . literal, etc.)
+        """
+        # Operadores y metacaracteres reservados del regex  
+        operadores_reservados = {'|', '·', '*', '+', '(', ')', '[', ']', '\\', '?'}
+        
+        # Un símbolo es cualquier carácter que NO sea un operador reservado
+        # El punto (.) es ahora un símbolo literal
+        # El operador de concatenación es · (MIDDLE DOT)
+        return caracter not in operadores_reservados
     
     def crear_afn_simbolo(self, simbolo):
         """Crea un AFN básico que acepta un solo símbolo"""
@@ -73,6 +88,27 @@ class ConstructorAFN:
         if simbolo == 'ε' or simbolo == 'E':
             # Para épsilon, hacer transición épsilon
             afn.agregar_transicion(estado_inicial, 'ε', estado_final)
+        elif simbolo == '●':
+            # Punto literal - convertir de vuelta a '.'
+            afn.agregar_transicion(estado_inicial, '.', estado_final)
+        elif simbolo == '◆':
+            # Signo de interrogación literal - convertir de vuelta a '?'
+            afn.agregar_transicion(estado_inicial, '?', estado_final)
+        elif simbolo == '◎':
+            # Paréntesis izquierdo literal - convertir de vuelta a '('
+            afn.agregar_transicion(estado_inicial, '(', estado_final)
+        elif simbolo == '◉':
+            # Paréntesis derecho literal - convertir de vuelta a ')'
+            afn.agregar_transicion(estado_inicial, ')', estado_final)
+        elif simbolo == '◈':
+            # Barra invertida literal - convertir de vuelta a '\'
+            afn.agregar_transicion(estado_inicial, '\\', estado_final)
+        elif simbolo == '◊':
+            # Llave izquierda literal - convertir de vuelta a '{'
+            afn.agregar_transicion(estado_inicial, '{', estado_final)
+        elif simbolo == '◘':
+            # Llave derecha literal - convertir de vuelta a '}'
+            afn.agregar_transicion(estado_inicial, '}', estado_final)
         else:
             afn.agregar_transicion(estado_inicial, simbolo, estado_final)
         
@@ -175,4 +211,28 @@ class ConstructorAFN:
             afn_resultado.agregar_transicion(estado_final, 'ε', nuevo_final)
             afn_resultado.agregar_transicion(estado_final, 'ε', afn.estado_inicial)
         
+        return afn_resultado
+    
+    def opcional(self, afn):
+        """Aplica el operador ? (cero o una repetición) a un AFN"""
+        afn_resultado = Automata()
+        
+        # Nuevo estado inicial/final
+        nuevo_estado = self.nuevo_estado()
+        afn_resultado.establecer_estado_inicial(nuevo_estado)
+        afn_resultado.agregar_estado_aceptacion(nuevo_estado)
+        
+        # Copiar estados y transiciones del AFN original
+        afn_resultado.estados = afn_resultado.estados.union(afn.estados)
+        afn_resultado.simbolos = afn.simbolos.copy()
+        afn_resultado.transiciones = afn.transiciones.copy()
+        
+        # Conectar nuevo estado con el inicial del AFN original (para "una ocurrencia")
+        afn_resultado.agregar_transicion(nuevo_estado, 'ε', afn.estado_inicial)
+        
+        # Conectar estados finales del AFN original con el nuevo estado final
+        for estado_final in afn.estados_aceptacion:
+            afn_resultado.agregar_transicion(estado_final, 'ε', nuevo_estado)
+        
+        # El nuevo estado ya es de aceptación, permitiendo "cero ocurrencias"
         return afn_resultado
