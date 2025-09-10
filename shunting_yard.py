@@ -127,13 +127,7 @@ def agregar_concatenacion(expresion):
             if siguiente == '|' or actual == '|':
                 continue
             
-            # Agregar concatenación solo cuando es necesario:
-            # - símbolo seguido de símbolo
-            # - símbolo seguido de paréntesis izquierdo  
-            # - paréntesis derecho seguido de símbolo
-            # - paréntesis derecho seguido de paréntesis izquierdo
-            # - operador unario (*,+,?) seguido de símbolo
-            # - operador unario (*,+,?) seguido de paréntesis izquierdo
+            # Agregar concatenación solo cuando es necesario
             
             necesita_concatenacion = False
             
@@ -164,8 +158,6 @@ def es_simbolo(caracter):
     operadores_reservados = {'|', '·', '*', '+', '(', ')', '[', ']', '\\', '?'}
     
     # Un símbolo es cualquier carácter que NO sea un operador reservado
-    # El punto (.) es ahora un símbolo literal
-    # El operador de concatenación es · (MIDDLE DOT)
     return caracter not in operadores_reservados
 
 def mostrar_conversion(expresion):

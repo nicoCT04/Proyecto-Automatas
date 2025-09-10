@@ -1,0 +1,34 @@
+# Carpetas de resultados generados
+Resultados_AFD/
+Resultados_AFD_Minimo/
+Resultados_AFN/
+
+# Cache de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+
+# Archivos temporales
+*.tmp
+*.log
+*.swp
+*.swo
+*~
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# IDE específicos
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
